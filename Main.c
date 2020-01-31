@@ -18,15 +18,16 @@ int main(int argc, const char *argv[])
     Instruction_Memory instr_mem;
     instr_mem.last = NULL;
     loadInstructions(&instr_mem, argv[1]);
-
+    //printInstructions(&instr_mem);
+        
     /* Task Two */
     // TODO, implement Core.{h,c}
-    Core *core = initCore(&instr_mem);
+    //Core *core = initCore(&instr_mem);
 
     /* Task Three - Simulation */
-    while (core->tick(core));
+    //while (core->tick(core));
 
     printf("Simulation is finished.\n");
 
-    free(core);    
+    //free(core);    
 }
