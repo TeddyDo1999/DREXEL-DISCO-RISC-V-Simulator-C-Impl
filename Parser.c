@@ -37,6 +37,8 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
         
         char *line_copy;
         strcpy(line_copy, line);
+        
+        printf("Current instruction %s \n", line);
         // Extract operation
         char *raw_instr = strtok(line, " ");
         if (strcmp(raw_instr, "add") == 0 ||//Add sd
@@ -49,9 +51,8 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
         { //R type assembly commands
             parseRType(raw_instr, &(i_mem->instructions[IMEM_index]));
             i_mem->last = &(i_mem->instructions[IMEM_index]);
-            printf("Address: %d\n", (i_mem->instructions[IMEM_index]).addr);
-            printf("Decimal of ins: %d \n", (i_mem->instructions[IMEM_index]).instruction);
-	    } else if 
+        }
+        else if 
         (strcmp(raw_instr, "ld") == 0 ||
          strcmp(raw_instr, "addi") == 0 ||
          strcmp(raw_instr, "slli") == 0 ||
@@ -61,16 +62,11 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
          strcmp(raw_instr, "andi") == 0 ||
          strcmp(raw_instr, "jalr") == 0 )
         {//I type, may or may not have immediate
-            printf("Confirmed I Type \n");
             parseIType(raw_instr, &(i_mem->instructions[IMEM_index]));
-            //raw_instr = strtok(NULL, " ");
-            //raw_instr = strtok(NULL, "(");
-            //printf("%s\n", raw_instr);
-            //parseIType(raw_instr, &(i_mem->instructions[IMEM_index]), line_copy);
             i_mem->last = &(i_mem->instructions[IMEM_index]);
-            printf("Address: %d\n", (i_mem->instructions[IMEM_index]).addr);
-            printf("Decimal of ins: %d \n", (i_mem->instructions[IMEM_index]).instruction);
-        } /* else if
+        } 
+
+        /* else if
          (strcmp(raw_instr, "beq") == 0 ||
          strcmp(raw_instr, "bne") == 0 ||
          strcmp(raw_instr, "blt") == 0 ||
@@ -90,6 +86,13 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
     }
 
     fclose(fd);
+
+//    printf("Here is the list of all instructions translated: \n");
+//    int i;
+//    for (i=0; i< IMEM_index; i++) {
+
+  //  }
+
 }
 
 
@@ -151,11 +154,14 @@ void parseRType(char *opr, Instruction *instr)
     instr->instruction |= (rs_1 << (7 + 5 + 3));
     instr->instruction |= (rs_2 << (7 + 5 + 3 + 5));
     instr->instruction |= (funct7 << (7 + 5 + 3 + 5 + 5));
+
+    printBinary(instr->instruction, "R");
 }
 
 
 #define ARILOG 0 //Arithmetics and Logic
 #define LOAD 1
+#define NONEXISTENT 99
 
 //Insert parseI type, parse SB type and parse UJ type
 void parseIType(char *opr, Instruction *instr ){
@@ -163,13 +169,15 @@ instr->instruction = 0;
 
     unsigned opcode = 0; //opcode differs on command
     unsigned funct3 = 0;
-    unsigned funct7 = 0; // exists only on certain command
-    int opr_branch;
+    unsigned funct7 = NONEXISTENT; // exists only on certain command
+    int opr_branch, imm=0;
+    unsigned rd, rs_1;
+
 
     if (strcmp(opr, "ld") == 0) {
         opcode = 3;
         funct3 = 0b011;
-        //funct7 is not here
+        //f7 is not here
         opr_branch = LOAD;
     } else if (strcmp(opr, "addi") == 0) {
         opcode = 19;
@@ -178,7 +186,7 @@ instr->instruction = 0;
         opr_branch = ARILOG;
     } else if (strcmp(opr, "slli") == 0) {
         opcode = 19;
-        funct3 = 0b010;
+        funct3 = 0b001;
         funct7 = 0b0000000;
         opr_branch = ARILOG;
     } else if (strcmp(opr, "srli") == 0) {
@@ -208,9 +216,7 @@ instr->instruction = 0;
         opr_branch = ARILOG;
     }
     
-    unsigned rd, rs_1;
-    int imm;
-
+    
     //Example: addi rd, rs1, imm
     if (opr_branch == ARILOG) {  
         char *reg = strtok(NULL, ", ");
@@ -220,8 +226,13 @@ instr->instruction = 0;
         rs_1 = regIndex(reg);
 
         reg = strtok(NULL, ", ");
-        imm = atoi(reg) ^ 0xFFFFF000; //Turning first 20 bits off
-
+        if (funct7 == NONEXISTENT){
+            imm = atoi(reg);
+        } else {
+            funct7 = funct7 << 5;
+            imm = atoi(reg)| funct7; 
+        }
+            
     //Example: ld rd, imm(rs1)
     } else if (opr_branch == LOAD){ 
         char *reg = strtok(NULL, ", ");
@@ -239,8 +250,9 @@ instr->instruction = 0;
     instr->instruction |= (funct3 << (7 + 5));
     instr->instruction |= (rs_1 << (7 + 5 + 3));
     instr->instruction |= (imm  << (7 + 5 + 3 + 5));
-    instr->instruction |= (funct7 << (7 + 5 + 3 + 5 + 5));
+    //instr->instruction |= (funct7 << (7 + 5 + 3 + 5 + 5));
 
+    printBinary(instr->instruction, "I");
 }
 
 void parseSBType(char *opr, Instruction *instr){
@@ -263,3 +275,39 @@ int regIndex(char *reg)
 
     return i;
 }
+
+// Print encoded instruction in binary
+void printBinary(int instr, char *mode)
+{
+    int c, k;
+    printf("Encoded instruction: ");
+    int bit = 31;
+
+    for (c = 31; c >= 0; c--) {
+        k = instr >> c;
+
+        if (k & 1) {
+            printf("1");
+        } else {
+            printf("0");
+        }
+
+        // partition the encoded instruction into their fields
+        if (strcmp(mode, "I") == 0) {
+            if (bit == 27 || bit == 20 || bit == 15 || bit == 12 || bit == 7){
+                printf(" ");
+            }
+        } else if (strcmp(mode, "R") == 0 || strcmp(mode, "S") == 0 || strcmp(mode, "SB") == 0) {
+            if (bit == 25 || bit == 20 || bit == 15 || bit == 12 || bit == 7){
+                printf(" ");
+            }
+        } else if (strcmp(mode, "U") == 0 || strcmp(mode, "UJ") == 0) {
+            if (bit == 12 || bit == 7) {
+                printf(" ");
+            }
+        }
+        bit --;
+    }
+    printf("\n");
+}
+
