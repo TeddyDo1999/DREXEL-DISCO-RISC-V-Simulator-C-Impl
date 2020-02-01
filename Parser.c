@@ -1,4 +1,3 @@
-
 #include "Parser.h"
 
 // FIXME, implement this function.
@@ -35,7 +34,9 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
     {
         // Assign program counter
         i_mem->instructions[IMEM_index].addr = PC;
-
+        
+        char *line_copy;
+        strcpy(line_copy, line);
         // Extract operation
         char *raw_instr = strtok(line, " ");
         if (strcmp(raw_instr, "add") == 0 ||//Add sd
@@ -58,15 +59,17 @@ void loadInstructions(Instruction_Memory *i_mem, const char *trace)
          strcmp(raw_instr, "srli") == 0 ||
          strcmp(raw_instr, "ori")  == 0 ||
          strcmp(raw_instr, "andi") == 0 ||
-         strcmp(raw_instr, "jarl") == 0 )
+         strcmp(raw_instr, "jalr") == 0 )
         {//I type, may or may not have immediate
-            int imm = 0;
-            char* immTok = strtok(line, "(");
-            printf("%s\n", immTok);
-            //immTok = strtok(NULL, "(");
-            //printf("%s\n", immTok);
-            //parseIType(raw_instr, &(i_mem->instructions[IMEM_index]));
+            printf("Confirmed I Type \n");
+            parseIType(raw_instr, &(i_mem->instructions[IMEM_index]));
+            //raw_instr = strtok(NULL, " ");
+            //raw_instr = strtok(NULL, "(");
+            //printf("%s\n", raw_instr);
+            //parseIType(raw_instr, &(i_mem->instructions[IMEM_index]), line_copy);
             i_mem->last = &(i_mem->instructions[IMEM_index]);
+            printf("Address: %d\n", (i_mem->instructions[IMEM_index]).addr);
+            printf("Decimal of ins: %d \n", (i_mem->instructions[IMEM_index]).instruction);
         } /* else if
          (strcmp(raw_instr, "beq") == 0 ||
          strcmp(raw_instr, "bne") == 0 ||
@@ -129,13 +132,16 @@ void parseRType(char *opr, Instruction *instr)
     }
     
     char *reg = strtok(NULL, ", ");
+    printf("rd: %s\n", reg);
     unsigned rd = regIndex(reg);
 
     reg = strtok(NULL, ", ");
+    printf("rs1: %s\n", reg);
     unsigned rs_1 = regIndex(reg);
 
     reg = strtok(NULL, ", ");
     reg[strlen(reg)-1] = '\0';
+    printf("rs2: %s\n", reg);
     unsigned rs_2 = regIndex(reg);
 
     // Contruct instruction
@@ -147,63 +153,92 @@ void parseRType(char *opr, Instruction *instr)
     instr->instruction |= (funct7 << (7 + 5 + 3 + 5 + 5));
 }
 
+
+#define ARILOG 0 //Arithmetics and Logic
+#define LOAD 1
+
 //Insert parseI type, parse SB type and parse UJ type
-void parseIType(char *opr, Instruction *instr){
+void parseIType(char *opr, Instruction *instr ){
 instr->instruction = 0;
 
     unsigned opcode = 0; //opcode differs on command
     unsigned funct3 = 0;
     unsigned funct7 = 0; // exists only on certain command
-    unsigned imm = 0;
+    int opr_branch;
 
     if (strcmp(opr, "ld") == 0) {
         opcode = 3;
         funct3 = 0b011;
-        
+        //funct7 is not here
+        opr_branch = LOAD;
     } else if (strcmp(opr, "addi") == 0) {
-        opcode = 51;
+        opcode = 19;
         funct3 = 0b000;
-        funct7 = 0b0100000; //40
+        //f7 is not here
+        opr_branch = ARILOG;
     } else if (strcmp(opr, "slli") == 0) {
-        opcode = 51;
-        funct3 = 0b001;
+        opcode = 19;
+        funct3 = 0b010;
         funct7 = 0b0000000;
+        opr_branch = ARILOG;
     } else if (strcmp(opr, "srli") == 0) {
-        opcode = 51;
-        funct3 = 0b101; //5
+        opcode = 19;
+        funct3 = 0b101; 
         funct7 = 0b0000000;
+        opr_branch = ARILOG;
     } else if (strcmp(opr, "xori") == 0) {
-        opcode = 51;
+        opcode = 19;
         funct3 = 0b100;
-        funct7 = 0b0000000;
+        //f7 is not here
+        opr_branch = ARILOG;
     } else if (strcmp(opr, "ori") == 0) {
-        opcode = 51;
-        funct3 = 0b110; //6
-        funct7 = 0b0000000;
+        opcode = 19;
+        funct3 = 0b110; 
+        //f7 is not here;
+        opr_branch = ARILOG;
     } else if (strcmp(opr, "andi") == 0) {
-        opcode = 51;
-        funct3 = 0b111; //7
-        funct7 = 0b0000000;
-    } else if (strcmp(opr, "jarl") == 0) {
-    
+        opcode = 19;
+        funct3 = 0b111; 
+        //f7 is not here;
+        opr_branch = ARILOG;
+    } else if (strcmp(opr, "jalr") == 0) {
+        opcode = 103;
+        funct3 = 0b000;
+        //f7 is not here; 
+        opr_branch = ARILOG;
     }
+    
+    unsigned rd, rs_1;
+    int imm;
 
-    char *reg = strtok(NULL, ", ");
-    unsigned rd = regIndex(reg);
+    //Example: addi rd, rs1, imm
+    if (opr_branch == ARILOG) {  
+        char *reg = strtok(NULL, ", ");
+        rd = regIndex(reg);
 
-    reg = strtok(NULL, ", ");
-    unsigned rs_1 = regIndex(reg);
+        reg = strtok(NULL, ", ");
+        rs_1 = regIndex(reg);
 
-    reg = strtok(NULL, ", ");
-    reg[strlen(reg)-1] = '\0';
-    unsigned rs_2 = regIndex(reg);
+        reg = strtok(NULL, ", ");
+        imm = atoi(reg) ^ 0xFFFFF000; //Turning first 20 bits off
 
+    //Example: ld rd, imm(rs1)
+    } else if (opr_branch == LOAD){ 
+        char *reg = strtok(NULL, ", ");
+        rd = regIndex(reg);
+
+        reg = strtok(NULL,"(");
+        imm = atoi(reg)^0xFFFFF000; //turning 20 bits off;
+
+        reg = strtok(NULL, ")");
+        rs_1 = regIndex(reg);
+    }
     // Contruct instruction
     instr->instruction |= opcode;
     instr->instruction |= (rd << 7);
     instr->instruction |= (funct3 << (7 + 5));
     instr->instruction |= (rs_1 << (7 + 5 + 3));
-    instr->instruction |= (rs_2 << (7 + 5 + 3 + 5));
+    instr->instruction |= (imm  << (7 + 5 + 3 + 5));
     instr->instruction |= (funct7 << (7 + 5 + 3 + 5 + 5));
 
 }
