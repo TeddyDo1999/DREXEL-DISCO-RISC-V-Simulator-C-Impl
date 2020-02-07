@@ -51,54 +51,54 @@ Total number of instructions executed 26 1 credit
  	  	   		 	     	      	   	    	  
    	   	     	  	   	 	 	  	     	       
 	  	 	    	     	     	      	      	    
-	  	   	  	     	  	 	   	    	  
-    	  	    	      	     	 	 	 	 	   
-	 	     	    	    	      	       	       	   	      
+	  	   	      	       	   	 	      	 	      
+ 		   	   		     	   	    	      	       
+   	       	    	    	    	   	      	       	       	       
 2. I have the following instruction: addi x6, x7, 9. Represent this instruction in
- 	       	      	   	     	    	   	     	 	  
-hexadecimal format filling all unused fields with 0’s (2 credit).       
-    	      	  	  		   	  	    	       
-Ans: 0x00938313	 	   	  	  		       	    	    
-	       	  	       	  	     	      	     	    	 
-	      		    	     	     	 	       	       	 
-  	       	 	       		 	      	   	    	       
+ 		   	      	   	      	     	       	    	 
+hexadecimal format filling all unused fields with 0’s (2 credit).    	 
+   	  	  	   	    	 		  	  	       
+Ans: 0x00938313     	     	      	  	      		  	       
+	     	       	       	      	  	       	 	  	    
+     	 		  	    			   	   	 
+      	    	   	       	   	       	 	      	     	   
 3. I have an array (A) of unknown size, with each array element represented using 8 bits.
-    	      	 	  	 	      	       		      	   
+   	 	 	 	   	 	   	 	   	       
 The base address of this array is O and the array elements are initialized as [0, 1, 2, 3,
-   	  	       	  		       	 	     	       	      
-4,5,...]. In other words, A(O) = O, A(1)= 1, A(2) = 2, and so on.  	      
-       	     	       	 	       	     	   	  	       	     
-  	 	       		   	    			   	    
-    	       	  	      	   	       	   	       	      	 
-   
-I have stored register x9 = 1. I have the following RISC-V codes:
-
-
-lb x7, 1(x9)
-
-lb x8, O(x9)
-
-addi x9, x7, 1
-
-sb x7, 2(x9)
-
-subi x9, x9,3
-
-sb x8, O(x9)
-
-
+  	       	     	    	    	    	  	       	       	 
+4,5,...]. In other words, A(O) = O, A(1)= 1, A(2) = 2, and so on.     	  
+       		      	      	      	  	       		 	     
+     	      			     	     		   		   
+  	       	       	    	       	  	       	  	      
+	  	 	       	      	       	 	      	  	   
+I have stored register x9 = 1. I have the following RISC-V codes:   	  
+      	       	     	   	     	      	     	     	      	      
+       	  	     	       	       	      	       	    	       	  
+lb x7, 1(x9)    	      	      	     	    	    	   	  
+       	      	      	       	   	  	      	    	    	  
+lb x8, O(x9)	      	 	     	      	 		     	     
+ 	       		  	   	      	   	    	     	    
+addi x9, x7, 1      	  	      	   	      	   	      	      
+     		     	     		    	  	      	    	       
+sb x7, 2(x9)     	 	    	 	      	   	     
+	    	   	      	      	    	     	    	   	   
+subi x9, x9,3       	      	  	      	     	       	      	 
+     	   	  		 	 	   	     	  	 
+sb x8, O(x9)      	     	    	 	      	    	   	 
+     	    	      	       	     	    	     	   	      
+	      	    	   	     	 	  	      	    
 What is the new content of the array A after this RISC-V code executes? (3 credits)
-
-
-
-A(O)    A(l)    A(Z)    A(3)    A(4)    A(5)    A(6)
-
-
-
-l       l       2       3       4       2       6
-
-
-
+	   	     	       		     	       		   
+	 	    	      	       	       	      		      	    
+   	  	     	     	  	       	      	    	 	       
+A(O)    A(l)    A(Z)    A(3)    A(4)    A(5)    A(6) 	   	       	       
+ 	 	 		      	       		     	 	  
+    	   	  	      	     	       	       	  	     	   
+      	   	   	   	   	 		 	     	    
+l       l       2       3       4       2       6       	 	 
+	       	    	   	   	      	      	     	     	  
+      	   	      	    	   	       	       	   	     	     
+   	  	 
 
 
 
