@@ -120,47 +120,47 @@ l       l       2       3       4       2       6
 instructions. 	  	     	   	 	    		     	   
     	 	   	 	   	 		      	       	      
 	      	  	      	 	   			 	 
-  	     	      	 	     	      	       	   	      	 
-CPU Class A B C D    	   	   	       		    	       	      
-   	 	  	     	   	   		 		 
-CPI for the class 1 1.5 2 3       	      			  	   
-     	      	      	   	  	  	      	      	      	     
-Instruction Set 1 3O 4O 20 10    	 		   	       	   
-       	     	     		       	      	 	      		
-Instruction Set 2 10 4O 4O 10	  	 	     	   	   	  
- 	 		  	       	 	       	      	      	      
-Instruction Set 3 80 O O 20       	  	   		       
-	   	     	   	       	      		   	       	    
-Answer the following    	    	   	  		   
-	       	       	     	      	       	 	 	     	 
-Average CPI of Instruction Set 1 1.6 1 credit  	       	  		 
-    	       	  	     	      	 	       		    	  
-Average CPI of Instruction Set 2 1.8 1 credit   	     		   
-  	      		    		    	     	       	 
-Average CPI of Instruction Set 3 1.4 1 credit	    	   	 	      
-   	   	     	       		  	       	    	  	 
-Average CPI of the overall program 1.6 2 credit     	      	   	   
-   	  	     	    	  	     	  			      
- 	 	     	     	    	       	       	    	     	     
-    	 		 	 	    	    	      	  	       
-    		  	    	     		 	  	  	     
-  	 	      	       	    	  	      	   	    
-	 	     	  	   	       			     	      
-    			    	      	      	   	    	 	     
-   			       	   	      	   	    	  
-	 	 	  	 	  	   	   		 
-     	   	  		      	     	     	 	   
-	   	     	 		       	     	    	       	 
-     	      	       	  	   	    	       	       	       	       
-       	       		 	  		      	 	  	      
-    	 	    	     	     	     		 	    	     
-    		  		    	    	    	   	    	 
-       	      	 	      	 	   	      	 	   	  
-  	    	       	     	 	      	     	     		       
- 	       	    	     	  	   	 	       	   	   
- 	    		   	      	       	  	       	       	  
-   	       	      	   	    	  	 	       	   	     
-   	     	 	      	   
+  	     	      	 	     	      	       	   	      	     
+CPU Class A B C D   		  	  	    	       	       	    
+      	       	       	     	 	      	   	       		
+CPI for the class 1 1.5 2 3	  	 	    	  	 	       
+	 	    		    	   	     			    
+Instruction Set 1 3O 4O 20 10  	  	      	     	 	       	   
+   	    	    		   	    	    	      	 	   
+Instruction Set 2 10 4O 4O 10      	 	   	 	  	  
+	       	     	     	  	 	  		   	   
+Instruction Set 3 80 O O 20    	  	    	   	       	       	       
+       	  	   	      	     	   		     	      	   
+Answer the following      	 	  	     	     	   	 
+  			      		    	     	     	 	  
+Average CPI of Instruction Set 1 1.6 1 credit       	   	      	   
+		  	     	     	  	  		    
+Average CPI of Instruction Set 2 1.8 1 credit	      	     	      	   
+	      		   	 	      	  	   	 	      
+Average CPI of Instruction Set 3 1.4 1 credit	      	    	    	    
+	      	  	 		   	   	   	  	      
+Average CPI of the overall program 1.6 2 credit	   	  	 	    
+    	       	  	 	  	 	       	 	   	       
+       	  	    	     	       	   	   	  	   	     
+  	       	    		    	      	    	      	       	   
+     	      	     		       	   	       		       	     
+  	  	  	       	  	  	    	      	    
+	  	 	  	    		      	       	 	   
+      	    	     	       		    	   	       	   	 
+  	    	      	   		    	    	     	       	  
+ 	 	      	     	 	    	       	    	    
+	    		      	       	      	 	    	      
+	 	     	  	    	    	   		 
+	       	       	  	       		 	   	     	   
+   	   	   	     	    		     	  	    	       
+	      	       	     	    	   	  	     	      	   
+     	    	    	    	      	       	     		  	     
+	       	      	    		 	 	      	       	 
+    	   	 	   	       	      	  	      	    	     
+      	     	      	 	 	       	      	  	 	    
+ 	       	       	     	   	    	    	    	  	       
+	     	       	  	       	  	     	      	     	     
+  	    	  		   	       			       
 
 
 
