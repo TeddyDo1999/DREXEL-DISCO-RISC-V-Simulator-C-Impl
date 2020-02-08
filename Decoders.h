@@ -79,88 +79,88 @@ lb x7, 1(x9)
 lb x8, O(x9)   		      	   	     	    	      		      
       		     	       	   	   	  	   		 
 addi x9, x7, 1     	   	   	       	       	      	       	  
-  	   	       	    	    	     		     		      
-sb x7, 2(x9)   	  	   	   				   	    
-    	       	 	       	   	 	     	    	    	    
-subi x9, x9,3      	   	   	    		    	       	       
-       	       	  	       	       	   	  	      	       	    
-sb x8, O(x9)     	     	      	       	  	    	    	  
-   	       	   		   	      	      	     	    	 
-  	 		      		       	       	    	       	  
+  	   	       	    	   	   	       	     	     	  
+sb x7, 2(x9)    	    	     	  	     	       	 	   
+    	      	      	    	  	      	     	   	      	   
+subi x9, x9,3    	       	   	    	     	 	      	    
+	      		 	   	     	  		  	    
+sb x8, O(x9)    		    	    	    	  	      	    
+     	      	    		 			    	 	     
+      	    		      	     	       	       	      	       	 
 What is the new content of the array A after this RISC-V code executes? (3 credits)
-    	   	  		    	      		  	     	     
-  	   		 	     	     	      	       	       	       
-      	    	   	  	    	   	   	   	  	    
-A(O)    A(l)    A(Z)    A(3)    A(4)    A(5)    A(6)  	 	     
-	  	      	 	       	     		       	     	    
-  		     	      	     	      	     	 	      	 
-      	      	      	   	       	 	      	   	 
-l       l       2       3       4       2       6	   	     	   
-     		   	    	      	      	 	      	       	    
-    	   	       	   	      	     	      	   	       	       
- 	   	     		      		  	     	  
-	 	    			       	      	     		    
-       	 	    	 	      	    	  	      	   	  
-    	     	  	  	    	     	       	  	    	    
-      	   	 	     	     		     	    	     	   
-       	       	  	  	    	    	      	   		  
-       	    	   	  	    	    			 	     
-  	  	 	  	    	  	   	      	    	     
-     	      	     		       	   	    	       		  
- 	 		       	      	      	   	      	      	    
-   	    	   	     	       	   	       	     	    
-	     	 	  	  	   	       	     	     	       
-	     		  		      	       	    	   	  
-      	    	      	    	     	     	   	  	  	      
-     	   	     	  	       	     	     	       	  	 
-  	 	   	 	     	  	  	 		   
-       	      	       	 	  	 	     	    	      	    
+     	   	   	    	   	  	   	  	 
+	    	     	   	 		      	      	  	       
+   	    		  	     	       	      	       	     	      
+A(O)    A(l)    A(Z)    A(3)    A(4)    A(5)    A(6)   	     	       	 
+   	  	    	  	  	 	   	  	    	   
+      	 		       	    	     	   		 	    
+   		    	  	  	     	       	 	       	       
+l       l       2       3       4       2       6   	    	     	    
+ 	     	   	       	    	    	    	       	       	      
+ 	    	 	     	 	   	      	  	      	     
+      	   		  	  	      	  	  	    	      
+	   	     	  	    	      	  	     	     	     
+ 	   	      	      	     	 		   	   	  
+   	   	 	  		    	     	    		      
+    	     	      	  	  		     	       	       	   
+  	 	    	   		  	     	     	    
+	     		    		       	    	 	  	       
+     		     	  			      	 	   	     
+      	      		  	       	     		       	      	    
+	       	      	      	 	  	       	       	      	 
+      	   	     	 	  	      	     	     	 	      
+       	       	    	       	    	   	      	   	       	  
+   	      	 	       	  	      	 	     	 	 
+  	 	     	   	    	      	       	 	    	     
+  	       	 	    		 	    		      	     
+ 	       	  	 		     	       	      	 	   
+	    	      	    	    	     	       	   	 	      
 4. I have the following information available to me for my program which has 3 sets of
-    	 	    	     		     	  	  	     	    
-instructions. 	  	     	   	 	    		     	   
-    	 	   	 	   	 		      	       	      
-	      	  	      	 	   			 	 
-  	     	      	 	     	      	       	   	      	     
-CPU Class A B C D   		  	  	    	       	       	    
-      	       	       	     	 	      	   	       		
-CPI for the class 1 1.5 2 3	  	 	    	  	 	       
-	 	    		    	   	     			    
-Instruction Set 1 3O 4O 20 10  	  	      	     	 	       	   
-   	    	    		   	    	    	      	 	   
-Instruction Set 2 10 4O 4O 10      	 	   	 	  	  
-	       	     	     	  	 	  		   	   
-Instruction Set 3 80 O O 20    	  	    	   	       	       	       
-       	  	   	      	     	   		     	      	   
-Answer the following      	 	  	     	     	   	 
-  			      		    	     	     	 	  
-Average CPI of Instruction Set 1 1.6 1 credit       	   	      	   
-		  	     	     	  	  		    
-Average CPI of Instruction Set 2 1.8 1 credit	      	     	      	   
-	      		   	 	      	  	   	 	      
-Average CPI of Instruction Set 3 1.4 1 credit	      	    	    	    
-	      	  	 		   	   	   	  	      
-Average CPI of the overall program 1.6 2 credit	   	  	 	    
-    	       	  	 	  	 	       	 	   	       
-       	  	    	     	       	   	   	  	   	     
-  	       	    		    	      	    	      	       	   
-     	      	     		       	   	       		       	     
-  	  	  	       	  	  	    	      	    
-	  	 	  	    		      	       	 	   
-      	    	     	       		    	   	       	   	 
-  	    	      	   		    	    	     	       	  
- 	 	      	     	 	    	       	    	    
-	    		      	       	      	 	    	      
-	 	     	  	    	    	   		 
-	       	       	  	       		 	   	     	   
-   	   	   	     	    		     	  	    	       
-	      	       	     	    	   	  	     	      	   
-     	    	    	    	      	       	     		  	     
-	       	      	    		 	 	      	       	 
-    	   	 	   	       	      	  	      	    	     
-      	     	      	 	 	       	      	  	 	    
- 	       	       	     	   	    	    	    	  	       
-	     	       	  	       	  	     	      	     	     
-  	    	  		   	       			       
+   	 	      		   	    	       	  	     	  
+instructions.       	  	    	       	   	     	  	    
+  	     	 	   	    	       	     	       	    
+	   		 	  		   	  	    	     
+ 	   		       	      	      	  	   	    	      
+CPU Class A B C D	 	    	  	   		       	    
+ 	   	    	   	  	       	      	      	 
+CPI for the class 1 1.5 2 3	   	       	   		 	   
+    	     	     		     	    	  	   	    	       
+Instruction Set 1 3O 4O 20 10    	    				 
+
+Instruction Set 2 10 4O 4O 10
+
+Instruction Set 3 80 O O 20
+
+Answer the following
+
+Average CPI of Instruction Set 1 1.6 1 credit
+
+Average CPI of Instruction Set 2 1.8 1 credit
+
+Average CPI of Instruction Set 3 1.4 1 credit
+
+Average CPI of the overall program 1.6 2 credit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
