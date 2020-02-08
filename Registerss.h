@@ -1,145 +1,148 @@
-Electrical and Computer Engineering Department	      	     	     	       
-       	    		       	   	 	     	       	    	   
-By Dr Anup Das	    		      	    	      	    	  	     
-	       		  	      	       	  	 	    	      
-    	   	   	      	   	       	 	      	  	   
-ECEC 355: Practice Midterm	   	  		       	 	   
-	     	  	 	     	      	   	     	     	      
-Winter 2020	  	     	    	     	   	      	     	    
-       	   	   	      	     	      	    	 		      
-Hanh Do Phung  	       	  	    		     	   	       	   
-	   		       	  	 		       	     	       
-    	 		 	      	   	     		 	     
-1. Consider the following RISC-V loop:	     	       	    	    	      
-       		 	 	    	 	 	   	    	       
-(i) LOOP: beq x6, xO,DONE 	   	     	       	  	    	 
- 	     	    		 		 		   	 
-(ii) addi x6, x6,-1       	      		      	       	  	   
-    	    	 	  	    	  	     	  		 
-(iii) addi x5, x5,2  	      		       	  	  	     	       
-     	  		   	   	    		  	  	    
-(iv) s||i x7, x5,1   	   	      	    	  	    	    	      
-     	    	     	      	     	     		     	    	 
-(v) jal x0, LOOP 	      	  	   		  		
-	       	    	   		     	    	     	      	      
-(vi) DONE: some-other-instruction       	       	       	   	 
-  	   	       	       	 		 	      	       	  
-Assume that the register x6 is initialized to the value 5, and x5 and x7 to the value 0.
-   	       	     	       	   	 	      		      
-Fill the table below		   	 		    	   	     
-   	 	    	       	     	     	       	      	   
-	 	      	      	      	       	 		      	 
-   	 	     		  	 	   	       	    
-		   	   	      	   		     	     	 
-       	   	   	    	  	 	       	    	 	    
-     	   	    	     	      	   	     	      	   
-	 	   		  	    		    	      
-	  	   	      	     		   		      
-	    	    	 		  	     	       	   	   
-	 	  	       	    	   	      	   	     	   
-  		 	   	     	       	   	   		    
-Final value of x5 at the end of execution 10 2 credit       	   	 
-  	      	   	       	 		    	    	     	  
-  	  	       	  		 	     	       	      	   
-Final value of x7 at the end of execution 20 2 credit      	       	       
-    	   	      		       	    	      	       	      	    
-    	 	  	 	  	   	      	  	       	 
-Total number of instructions executed 26 1 credit      	      	    	 
-   	       	    	   	    	 	 	      	 	     
-     	    	 	    		  	      		  	     
-    	    		 	     	     	     	    	   	  
-	  	   	   		 	    	  	  	   
- 	  		 	    	      	   	    	  	       
-    	 	  			      	      	  	      	    
-  	   	  	      			  	      	   	 
+/* Program removes a message from a previously created message queue.	      
+ *     	     	       	       	    		       	   	 	     
+ * Author: Naga Kandsamy       	    	   		    		      
+ * Date created: July 12, 2018    	      	    	  	     
+ * Date modified: January 22, 2020	       		  	      	       
+ *  	 	    	      	    	   	   	      	   	       
+ * Compile as follows: gcc -o recv_msg recv_msg.c -std=c99 -Wall -lrt 	      
+ *  	   		   	  		       	 	   
+ * Source: M. Kerrisk, The Linux Programming Interface.	     	  	 
+ *  */     	      	   	     	     	      		  	     
+    	     	   	      	     	    	       	   	   	      
+#define _POSIX_C_SOURCE 2     	      	    	 		      	  
+       	  	    		     	   	       	   		   
+#include <mqueue.h>	       	  	 		       	     	       
+#include <sys/stat.h>    	 		 	      	   	     
+#include <fcntl.h>	 	     		     	       	    	    
+#include <stdlib.h>      	       		 	 	    	 
+#include <unistd.h> 	   	    	       	 	   	     	       
+#include <stdio.h>  	    	 	 	     	    		 
+#include <string.h>	 		   	 	       	      
+#include <errno.h>	      	       	  	   	    	    	 
+  	    	  	     	  		 	  	      
+	       	  	  	     	       	     	  		   
+void   	    		  	  	    	   	   	      	    
+usage_error (char *program_name)  	    	    	      	     	    
+{     	      	     	     		     	    	 	 	      
+    fprintf (stderr, "Usage: %s [-n] mq-name \n", program_name);  	   
+    fprintf (stderr, " -n           Use O_NOBLOCK flag \n");	  
+    exit (EXIT_FAILURE);		       	    	   		     
+}    	     	      	      	       	       	       	   	 	  
+   	       	       	 		 	      	       	  	   
+       	     	       	   	 	      		      		
+int	   	 		    	   	     	   	 	    
+main (int argc, char **argv)       	     	     	       	      	   
+{	 	      	      	      	       	 		      	 
+    int flags, opt;   	 	     		  	 	   	       
+    mqd_t mqd;    			   	   	      	   
+    unsigned int priority;	     	     	 	       	   	   
+    void *buffer;    	  	 	       	    	 	    	     
+    struct mq_attr attr;   	    	     	      	   	     	      
+    ssize_t nr;   		 	   		  	    
+	    	      		  	   	      	     		   
+    flags = O_RDONLY;	      		    	    	 		  
+    while ((opt = getopt (argc, argv, "n")) != -1) {     	       	   
+        switch (opt){   		 	  	       	    	   
+            case 'n':      	   	     	   	  		 
+                flags |= O_NONBLOCK;   	     	       	   	   
+                break;	    	       	   	 	  	      	   
+       	 		    	    	     	  	  	  	       
+            default:  		 	     	       	      	   	      
+                usage_error (argv[0]);       	       	    	   	      
+        }	       	    	      	       	      	    	    	 
+    }  	 	  	   	      	  	       	 	      	      
+    	 	   	       	    	   	    	 	 	      
+    if (optind >= argc) 	     	     	    	 	    
+        usage_error (argv[0]);	  	      		  	     	    
+    		 	     	     	     	    	   	  
+    /* Open the MQ for O_RDONLY operation */	  	   	   
+    mqd = mq_open (argv[optind], flags);	 	    	  	  
+    if (mqd == (mqd_t) -1) {   	 	  		 	    	      
+        perror ("mq_open");   	    	  	       	    	 	  
+        exit (EXIT_FAILURE);		      	      	  	      	    
+    }  	   	  	      			  	      	   	 
       	       	  		    		     	 	  	 
-     	      	   	       	  	       	      	     	      	  
-2. I have the following instruction: addi x6, x7, 9. Represent this instruction in
- 	   	      	 	    	  	      	 	  	  
-hexadecimal format filling all unused fields with 0’s (2 credit).  	    
-     			     	    	     	      	       		       
-Ans: 0x00938313 			     	 	      	  	    
- 	      	   	 	       	    	     	 	   	       
-       	  	   	      	     	 	      	       	 
-	   	   		     	    	 	       		 
-3. I have an array (A) of unknown size, with each array element represented using 8 bits.
- 	    	  		   	      	       	     	 	     
-The base address of this array is O and the array elements are initialized as [0, 1, 2, 3,
+    /* Get the attributes of the MQ */     	      	   	       	  
+    if (mq_getattr (mqd, &attr) == -1) {       	      	     	      	  
+        perror ("mq_getattr"); 	   	      	 	    	  	      
+        exit (EXIT_FAILURE); 	  	  	  	    	     
+    }		     	    	     	      	       		       	 
+		     	 	      	  	    	 	      	   
+    /* Allocate local buffer to store the received message from the MQ */ 
+    buffer = malloc (sizeof(attr.mq_msgsize));       	    	     	 
+    if (buffer == NULL) {   	       	       	  	   	      	     
+        perror ("malloc"); 	      	       	 		   	   
+        exit (EXIT_FAILURE);	     	    	 	       		 
+    } 	    	  		   	      	       	     	 	     
    	       	    	      	   	     	  	   	    	 
-4,5,...]. In other words, A(O) = O, A(1)= 1, A(2) = 2, and so on.    
-	   	      	   	     	  		      	       	       
-   	       	      		   	    	  		      	       
-       	   	       	       	  		      	      	    
+    nr = mq_receive (mqd, buffer, attr.mq_msgsize, &priority);    
+    if (nr == -1) {	   	      	   	     	  		      
+        perror ("mq_receive");       	       	   	       	      
+        exit (EXIT_FAILURE);	   	    	  		      	       
+    }       	   	       	       	  		      	      	    
 	 	 	 	  	      	  	       	     	     
-I have stored register x9 = 1. I have the following RISC-V codes:       
-	  		       	     	      	    	 	     	   
-       	  	  	      	       	     	  	 	   	  
-lb x7, 1(x9)       	    	    	  	   	    	   	  
-   	    	       	   	     	 		       		 
-lb x8, O(x9)   	    		 	   	   	       	      	 
-       	     	 	 	  	     	       	       	       	       
-addi x9, x7, 1       	    	  	      			     	       
-      	      			    	     		     	    	       
-sb x7, 2(x9) 	     	      	  	   	   	    		    
-  	    	 	       		      	     	     	 	    
-subi x9, x9,3      		    	     	 		   	     
-     		   	       	      	       	       		     
-sb x8, O(x9)	    	  	      	 	      	   	    	    
-     	       	    	 	     	 	  	    	     	   
-  		    	       	      	      	     		       	      
-What is the new content of the array A after this RISC-V code executes? (3 credits)
-  	       	 		  		  	  	   	   
-    	 	     	     	      	      	      	 	       	      
-   		    	     	    	      	       	   	 	   
-A(O)    A(l)    A(Z)    A(3)    A(4)    A(5)    A(6)	  	    	       
-       	  	  	      	    	  	       	      		  
- 	      		    	       	   	 	    	      	    
-     	    	   	      	   	      	  	       	     	  
-l       l       2       3       4       2       6       	 	     
-   	 		   	  	   		     	 	   
-     	      	       	     	    	   	 	     	 
-	    	 	      	   	     		    	    	   
-  	    		 	       	  	  	      	       	 
-    	 	   	   	       	  	    	    	     	       
-   	   	  	     	       	   		 		  
- 	  	 	     			      	     	      	     
-    	     	      	      	     	    	   	       	   	  
-    	      	  	   	       	 	      	   	  	    
-    	     	      	       	      		       	      	   
-		       	     	     	  	    	  	      	    
-    	     	      	 	 	    	       	   	      	     
-  		 	      	  	     		       	       	   
-      	   	      	   	  	     	    	     	    
-		 			    	  	 	    	  
-  	       	     	       	     		  		  	 
-       	       		    	    	     	 		    	   
-      	  	 	    	 	    	       	 	       	       
-      		   	 	       		       	     		    
-4. I have the following information available to me for my program which has 3 sets of
-    	  	 		      	    		    	       	   
-instructions.     	      	      	 	   	     	     	  
-       	      	   	     	 		     	  	    
-	    	   	     	   	       	      		 	     
-      	 	   	     	       	       		  	     	   
-CPU Class A B C D  	 	   		    	      	       
-	      	     	     	      	  	      	      	    	  
-CPI for the class 1 1.5 2 3       	    	     	     	   	    
+    printf ("Read %ld bytes; priority = %u \n", (long) nr, priority);       
+    if (write (STDOUT_FILENO, buffer, nr) == -1) {	  		       
+        perror ("write");     	      	    	 	     	   	       
+        exit (EXIT_FAILURE);  	  	      	       	     	  	 
+    }   	  	       	    	    	  	   	    	   
+  	   	    	       	   	     	 		       
+    exit (EXIT_SUCCESS);	 	   	    		 	   
+}   	       	      	 	       	     	 	 	  	     
+       	       	       	       	       	    	  	      		
+	     	       	      	      			    	     
+	     	    	       	 	     	      	  	   	   
+    		    	  	    	 	       		      	     
+     	 	    	      		    	     	 		   
+     	     		   	       	      	       	       		     
+	    	  	      	 	      	   	    	    	     
+       	    	 	     	 	  	    	     	   	  
+	    	       	      	      	     		       	      	  
+       	 		  		  	  	   	   	    
+ 	     	     	      	      	      	 	       	      	   
+	    	     	    	      	       	   	 	   
+	  	    	       	       	  	  	      	    	  
+       	      		  	 	      		    	       	   
+ 	    	      	    	     	    	   	      	   	      
+  	       	     	  	       	 	     	   	 
+	   	  	   		     	 	   	     	      
+       	     	    	   	 	     	 		    	 
+      	   	     		    	    	   	  	    
+	 	       	  	  	      	       	 	    	 
+   	   	       	  	    	    	     	       	   	   
+  	     	       	   		 		  	 	  
+ 	     			      	     	      	     	    	     
+      	      	     	    	   	       	   	  	    	      
+  	   	       	 	      	   	  	    	    	     
+      	       	      		       	      	   			       
+     	     	  	    	  	      	    	    	     	      
+ 	 	    	       	   	      	     	  		 
+      	  	     		       	       	   	      	   	      
+   	  	     	    	     	    			 
+		    	  	 	    	  	  	       	     
+       	     		  		  	 	       	       
+	    	    	     	 		    	   	      	  
+ 	    	 	    	       	 	       	       	      
+	   	 	       		       	     		    	    
+  	 		      	    		    	       	   	     
+      	      	 	   	     	     	  	       	      	   
+     	 		     	  	    		    	   	     
+   	       	      		 	     	      	 	   	     
+       	       		  	     	   	  	 	   
+	    	      	       		      	     	     	      	  
+      	      	    	  	       	    	     	     	   	    
 	     	  	   	  	   	  	      	       	     
-Instruction Set 1 3O 4O 20 10 		   	       	       	       	  
-    	     	   	     	  	  		       	     	   
-Instruction Set 2 10 4O 4O 10      	       	   	  		 
- 	    	  	     		   	  	    	   
-Instruction Set 3 80 O O 20		  	 	     		
-	 	     	      	       	    	      	  	    	 
-Answer the following    	  	      	     	      	       	 
-		  	    	 		   	    		  
-Average CPI of Instruction Set 1 1.6 1 credit       	       	 
-	 	      	 	 	 	    	    	    	  
-Average CPI of Instruction Set 2 1.8 1 credit   	       	      	       
- 		       	     	  	      	  	      	       	   
-Average CPI of Instruction Set 3 1.4 1 credit   	       	    	  
-    	  		 	   	      	       	    	    	       
-Average CPI of the overall program 1.6 2 credit       		       	       
+ 		   	       	       	       	  	    	     	   
+     	  	  		       	     	   	      	       	   
+  		 	 	    	  	     		   	  
+    	   			  	 	     			 
+     	      	       	    	      	  	    	 	    	  
+      	     	      	       	 			  	    	 
+	   	    		  	       	       	 		 
+      	 	 	 	    	    	    	  	   	       
+      	       	 		       	     	  	      	  	      
+       	   	   	       	    	  	    	  		 
+   	      	       	    	    	       	       		       	       
  	  	 	 	      	  	 	 	   	   
       	   	  	  	  	     	      		   	    
     	 		   	     	   	     	  	       
@@ -156,13 +159,3 @@ Average CPI of the overall program 1.6 2 credit
        	      	     	     	       	      	     	   	   	   
  	    	 	       		  	  	    	  	    
 	  	   
-
-
-
-
-
-
-
-
-
-
