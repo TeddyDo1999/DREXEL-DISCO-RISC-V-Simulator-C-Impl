@@ -1,7 +1,16 @@
-This is the C implementation of https://github.com/Shihao-Song/DREXEL-DISCO-RISC-V-Simulator.
+This was originally the work of Shihao Song:
 
-To compile:
-make
+https://github.com/Shihao-Song/DREXEL-DISCO-RISC-V-Simulator.
 
-To run:
-./RVSim cpu_traces/example_cpu_trace
+as an excercise for students in the ECEC 355 course: Computer Architecture taught by Dr. Anup K. Das
+at Drexel University. The code by Shihao is the incomplete simulation of the single cycle computer architecture 
+using RISC V ISA. 
+
+We, Hanh Do Phung and Quang Anh Hoang, are working to complete the simulation. The repo is all the 
+source codes needed but encoded with stegsnow to prevent plagiarism (since, we have just realized lately,
+the fork cannot be made private). Howver, we have moved on to another private repo because we are tired of encoding
+-decoding the files each push/pull we made.
+
+It's all yours now, Have fun decoding!
+
+
